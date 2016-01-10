@@ -36,6 +36,39 @@
     return Data.isProfileImageSet;
 }
 
+- (void)setProfileImageStatus2:(BOOL)status {
+    DataAccess *Data = [DataAccess singletonInstance];
+    Data.isProfileImageSet = status;
+    [Data persistToUserDefaults];
+}
+
+- (BOOL)ProfileImageIsSet2 {
+    DataAccess *Data = [DataAccess singletonInstance];
+    return Data.isProfileImageSet;
+}
+
+- (void)setProfileImageStatus3:(BOOL)status {
+    DataAccess *Data = [DataAccess singletonInstance];
+    Data.isProfileImageSet = status;
+    [Data persistToUserDefaults];
+}
+
+- (BOOL)ProfileImageIsSet3 {
+    DataAccess *Data = [DataAccess singletonInstance];
+    return Data.isProfileImageSet;
+}
+
+- (void)setProfileImageStatus4:(BOOL)status {
+    DataAccess *Data = [DataAccess singletonInstance];
+    Data.isProfileImageSet = status;
+    [Data persistToUserDefaults];
+}
+
+- (BOOL)ProfileImageIsSet4 {
+    DataAccess *Data = [DataAccess singletonInstance];
+    return Data.isProfileImageSet;
+}
+
 - (void)setAddedFB:(BOOL)status {
     [[NSUserDefaults standardUserDefaults] setBool:status forKey:@"AddedFB"];
 }
@@ -186,6 +219,57 @@
 -(UIImage*)getProfileImage{
     
     NSData* imageData = [[NSUserDefaults standardUserDefaults] objectForKey:@"ProfileImage"];
+    UIImage* image = [UIImage imageWithData:imageData];
+    return image;
+    
+}
+
+-(void)setProfileImage2:(UIImage*)image{
+    
+    DataAccess *Data = [DataAccess singletonInstance];
+    Data.profileImage = image;
+    [Data persistToUserDefaults];
+    
+    
+}
+
+-(UIImage*)getProfileImage2{
+    
+    NSData* imageData = [[NSUserDefaults standardUserDefaults] objectForKey:@"ProfileImage2"];
+    UIImage* image = [UIImage imageWithData:imageData];
+    return image;
+    
+}
+
+-(void)setProfileImage3:(UIImage*)image{
+    
+    DataAccess *Data = [DataAccess singletonInstance];
+    Data.profileImage = image;
+    [Data persistToUserDefaults];
+    
+    
+}
+
+-(UIImage*)getProfileImage3{
+    
+    NSData* imageData = [[NSUserDefaults standardUserDefaults] objectForKey:@"ProfileImage3"];
+    UIImage* image = [UIImage imageWithData:imageData];
+    return image;
+    
+}
+
+-(void)setProfileImage4:(UIImage*)image{
+    
+    DataAccess *Data = [DataAccess singletonInstance];
+    Data.profileImage = image;
+    [Data persistToUserDefaults];
+    
+    
+}
+
+-(UIImage*)getProfileImage4{
+    
+    NSData* imageData = [[NSUserDefaults standardUserDefaults] objectForKey:@"ProfileImage4"];
     UIImage* image = [UIImage imageWithData:imageData];
     return image;
     

@@ -7,10 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DraggableView.h"
 
-@interface SwipeViewController : UIViewController
+@interface SwipeViewController : UIViewController<DraggableViewPic>
 
 @property (nonatomic, strong) UINavigationBar *navBar;
++ (id)singletonInstance;
+-(void)pushToAlbum;
+
 
 
 @end

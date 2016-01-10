@@ -9,6 +9,7 @@
 #import "SwipeViewController.h"
 #import "DraggableViewBackground.h"
 #import "NotificationsViewController.h"
+#import "SwipeAlbumViewController.h"
 #import "UserMenuViewController.h"
 
 @interface SwipeViewController ()
@@ -20,6 +21,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    DraggableView *draggableView = [[DraggableView alloc]init];
+    
+    draggableView.delegate = self;
+
     
     [self styleNavBar];
     [self addMainView];
@@ -221,6 +226,33 @@
 -(UIColor*)navColor{
     
     return [UIColor colorWithRed:0.0 green:172.0f/255.0f blue:237.0f/255.0f alpha:1.0];
+}
+
+-(void)pushViewControllerUsingDelegate:(UIViewController *)viewController
+{
+    NSLog(@"uyuycyutcuty");
+    
+    [self.navigationController pushViewController:viewController animated:YES];
+}
+
+-(void)pushToAlbum{
+    
+    
+
+    
+}
+
++ (id)singletonInstance {
+    
+    static SwipeViewController *sharedSwipe = nil;
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedSwipe = [[self alloc] init];
+    });
+    
+    return sharedSwipe;
+    
 }
 
 

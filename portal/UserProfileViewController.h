@@ -1,17 +1,16 @@
 //
-//  ProfileViewController.h
+//  UserProfileViewController.h
 //  portal
 //
-//  Created by Neil Ballard on 11/17/15.
+//  Created by Neil Ballard on 12/29/15.
 //  Copyright © 2015 Neil_appworld. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-#import <linkedin-sdk/LISDK.h>
 
+@interface UserProfileViewController : UIViewController
 
-@interface ProfileViewController : UIViewController<UIScrollViewDelegate>
-
+@property (nonatomic, strong) UINavigationBar *navBar;
 
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong) UILabel *contact_time;

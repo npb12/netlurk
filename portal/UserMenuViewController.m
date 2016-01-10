@@ -198,7 +198,6 @@
     
     [titleView setBackgroundImage:[UIImage imageNamed:@"settings"] forState:UIControlStateNormal];
     
-  //  NSString *titleText = @"Portal";
   //  [titleView setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     
   //  [titleView setTitle:titleText forState:UIControlStateNormal];

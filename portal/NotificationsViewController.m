@@ -18,6 +18,8 @@
 #import "ProfileViewController.h"
 #import "FBAccountViewController.h"
 #import "LinkedinAccountViewController.h"
+#import "UserProfileViewController.h"
+#import "UserAlbumViewController.h"
 
 @interface NotificationsViewController ()
 
@@ -203,7 +205,7 @@
     UIButton *titleView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
     [titleView setUserInteractionEnabled:NO];
    
-    UIImage *Notifications_image = [[UIImage imageNamed:@"Notifications"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    UIImage *Notifications_image = [[UIImage imageNamed:@"connections"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     [titleView setBackgroundImage:Notifications_image forState:UIControlStateNormal];
 //    NSString *titleText = @"Name";
@@ -238,10 +240,7 @@
     self.searchTextField.layer.cornerRadius = 7.0;
     self.searchTextField.translatesAutoresizingMaskIntoConstraints = NO;
     [self.searchTextField invalidateIntrinsicContentSize];
-    
-    if ([[DataAccess singletonInstance] getSnapchat] != nil) {
-        self.searchTextField.text = [[DataAccess singletonInstance] getSnapchat];
-    }
+
     
     CGRect screen = [[UIScreen mainScreen] bounds];
     CGFloat height = 0, width = 0, xpad = 0, ypad = 0;
@@ -271,9 +270,9 @@
     else if ([[DeviceManager sharedInstance] getIsIPhone4Screen] || [[DeviceManager sharedInstance] getIsIPad])
     {
         self.searchTextField.font = [UIFont fontWithName:@"HelveticaNeue" size:ceilf(28/2)];
-        height = 30;
+        height = 36;
         xpad = 15;
-        ypad = 0;
+        ypad = 7;
     }
     
     self.searchTextField.backgroundColor = [self grayColor];
@@ -435,39 +434,29 @@
         cell = [[NotificationsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault  reuseIdentifier:MyIdentifier];
     }
     
+    
+    
     UIFont *myFont = [ UIFont fontWithName: @"Arial" size: 19.0 ];
     cell.textLabel.font  = myFont;
     cell.textLabel.textColor = [UIColor lightGrayColor];
     
-    if (indexPath.row == 0) {
+    cell.pic.userInteractionEnabled = YES;
+    
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(picturePressed:)];
+    [cell.pic addGestureRecognizer:tapGesture];
+    
+    
+    if (indexPath.row  % 3 == 0) {
         
-   //     cell.textLabel.text = @"Facebook";
+        cell.notificationLabel.text = @"Bob viewed your instagram";
+        cell.notificationLabel.numberOfLines = 2;
         
-    }else if (indexPath.row == 1) {
+    }else if(indexPath.row  % 3 == 1){
+        cell.notificationLabel.text = @"Aaron right swiped you";
         
-        //      if ([[DataAccess singletonInstance] getInstagram] != nil) {
-        //          cell.textLabel.text = [[DataAccess singletonInstance] getInstagram];
-        //      }else{
-   //     cell.textLabel.text = @"Instagram";
-        //      }
-        
-    }
-    else if (indexPath.row == 2) {
-        
-        
-        //      if ([[DataAccess singletonInstance] getLinkedin] != nil) {
-        //         cell.textLabel.text = [[DataAccess singletonInstance] getLinkedin];
-        //      }else{
-   //     cell.textLabel.text = @"Linkedin";
-        //      }
-        
-    }
-    else if (indexPath.row == 3) {        
-        //        if ([[DataAccess singletonInstance] getSnapchat] != nil) {
-        //            cell.textLabel.text = [[DataAccess singletonInstance] getSnapchat];
-        //       }else{
-   //     cell.textLabel.text = @"Snapchat";
-        //       }
+    }else{
+        cell.notificationLabel.text = @"Three people viewed your twitter";
+
     }
     
 
@@ -706,6 +695,22 @@
 
 - (UIColor *) cdNavBlue {
     return [UIColor colorWithRed:0.00 green:0.59 blue:0.85 alpha:1.0];
+}
+
+- (void)picturePressed:(id)sender {
+    
+    UserAlbumViewController *albums = [[UserAlbumViewController alloc] init];
+    [self.navigationItem setHidesBackButton:YES];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [self.navigationController pushViewController:albums animated:NO];
+    //[self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    
+    /*
+     InstagramFieldViewController *account = [[InstagramFieldViewController alloc] init];
+     [self.navigationItem setHidesBackButton:YES];
+     [self.navigationController setNavigationBarHidden:NO animated:NO];
+     [self.navigationController pushViewController:account animated:YES];*/
+    
 }
 
 

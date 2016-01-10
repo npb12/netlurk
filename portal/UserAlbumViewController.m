@@ -1,23 +1,16 @@
 //
-//  ProfileViewController.m
-//  portal
+//  UserAlbumViewController.m
+//  netlurk
 //
-//  Created by Neil Ballard on 11/17/15.
-//  Copyright © 2015 Neil_appworld. All rights reserved.
+//  Created by Neil Ballard on 1/4/16.
+//  Copyright © 2016 Neil_appworld. All rights reserved.
 //
 
-#import "ProfileViewController.h"
+#import "UserAlbumViewController.h"
 #import "DeviceManager.h"
-#import "AlbumsTableViewController.h"
 #import "DataAccess.h"
-#import "InstagramFieldViewController.h"
-#import "MyProfileTableViewCell.h"
-#import "AccountViewController.h"
-#import "ProfilePictureViewController.h"
 
-
-
-@interface ProfileViewController ()
+@interface UserAlbumViewController ()
 
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UIView *tempView;
@@ -29,9 +22,11 @@
 @property (strong, nonatomic) IBOutlet UIImageView *pic4;
 @property (strong, nonatomic) IBOutlet UIView *headerView;
 
+
+
 @end
 
-@implementation ProfileViewController
+@implementation UserAlbumViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -45,7 +40,7 @@
     self.instagram = [[DataAccess singletonInstance] getInstagram];
     self.linkedinId = [[DataAccess singletonInstance] getLinkedin];
     self.snapchat = [[DataAccess singletonInstance] getSnapchat];
-    
+
     
     self.tempView = [[UIView alloc] init];
     [self.tempView setFrame:fullScreenRect];
@@ -64,7 +59,7 @@
     self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
     
     self.automaticallyAdjustsScrollViewInsets = NO;
-    
+
     
     self.scrollView.backgroundColor = [UIColor blackColor];
     
@@ -106,7 +101,7 @@
     self.scrollView.contentSize = CGSizeMake(cRect.origin.x, self.scrollView.bounds.size.height);
     self.scrollView.contentOffset = CGPointMake(self.scrollView.bounds.size.width, 0);
     
-    
+
     [self addHeaderView];
     [self addProPhoto];
     [self setupNameLabel];
@@ -650,7 +645,7 @@
         self.facebookIcon.userInteractionEnabled = NO;
         self.facebookIcon.alpha = 0.2;
     }
-    
+
     
     [self.facebookIcon setBackgroundColor:[UIColor  clearColor]];
     
@@ -1038,7 +1033,5 @@
     //[self.navigationController dismissViewControllerAnimated:YES completion:nil];
     [self.navigationController popViewControllerAnimated:NO];
 }
-
-
 
 @end

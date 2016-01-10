@@ -16,8 +16,6 @@
 @property (nonatomic, retain) UIView * firstLine;
 @property (nonatomic, retain) UIImageView * background_image;
 @property (nonatomic,unsafe_unretained) CGRect mainScreenBounds;
-@property (nonatomic, retain) UIImageView * checkbox;
-@property (nonatomic, retain) UILabel *optionLabel;
 @property (nonatomic, retain) UINavigationBar * navBar;
 
 
@@ -46,8 +44,6 @@
     [self setupnetworkLabel];
     [self addFirstLine];
     [self setupnetworkTextField];
-    [self addBox];
-    [self setupoptionLabel];
     [self addLine];
 }
 
@@ -179,7 +175,7 @@
     [self.Line setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.Line invalidateIntrinsicContentSize];
     
-    UIImageView *top = self.checkbox;
+    UITextField *top = self.networkTextField;
     NSDictionary *viewsDictionary = @{@"top":top, @"line" : self.Line};
     NSArray *constraint1 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[line(width)]"
                                                                    options:0 metrics:@{@"width":[NSNumber numberWithFloat:width]} views:viewsDictionary];
@@ -259,129 +255,6 @@
     [self.view addConstraints:vConstraints];
     
 }
-
-
-- (void)addBox {
-    
-    
-    self.checkbox = [[UIImageView alloc] init];
-    self.checkbox.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.checkbox invalidateIntrinsicContentSize];
-    
-    self.checkbox.userInteractionEnabled = YES;
-    
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(boxPressed:)];
-    [self.checkbox addGestureRecognizer:tapGesture];
-    
-    if([[DataAccess singletonInstance] snapchatIsPublic]){
-        
-        self.checkbox.image = [UIImage imageNamed:@"checkedbox.png"];
-        
-        
-    }else{
-        self.checkbox.image = [UIImage imageNamed:@"checkbox.png"];
-    }
-    
-    
-    CGFloat pad, pad1 = 0, pad2, height = 0, width = 0;
-    if([[DeviceManager sharedInstance] getIsIPhone5Screen])
-    {
-        pad1 = 10;
-        pad = 20;
-        pad2 = 25;
-        height = 20;
-        width = 20;
-    }
-    else if ([[DeviceManager sharedInstance] getIsIPhone6Screen])
-    {
-        pad = 20;
-        height = 25;
-        width = 25;
-        pad2 = 25;
-        pad1 = 10;
-        
-    }
-    else if ([[DeviceManager sharedInstance] getIsIPhone6PlusScreen])
-    {
-        pad = 20;
-        height = 25;
-        width = 25;
-        pad2 = 25;
-        
-    }
-    else if ([[DeviceManager sharedInstance] getIsIPhone4Screen] || [[DeviceManager sharedInstance] getIsIPad]) {
-        pad = 20;
-        height = 25;
-        width = 25;
-        pad2 = 25;
-        pad1 = 10;
-        
-    }
-    
-    
-    [self.view addSubview:self.checkbox];
-    
-    
-    NSDictionary *viewsDictionary = @{@"box":self.checkbox, @"top": self.networkTextField};
-    NSArray *constraint1 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-pad-[box]" options:0 metrics:@{@"pad":[NSNumber numberWithFloat:pad2]} views:viewsDictionary];
-    NSArray *constraint5 = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[top]-pad1-[box]" options:0 metrics:@{@"pad":[NSNumber numberWithFloat:pad], @"pad1":[NSNumber numberWithFloat:pad1]} views:viewsDictionary];
-    [self.view addConstraints:constraint1];
-    [self.view addConstraints:constraint5];
-    
-    NSLayoutConstraint *constraint6 = [NSLayoutConstraint constraintWithItem:self.checkbox attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:height];
-    [self.view addConstraint:constraint6];
-    
-    NSLayoutConstraint *constraint7 = [NSLayoutConstraint constraintWithItem:self.checkbox attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:width];
-    [self.view addConstraint:constraint7];
-    
-    
-    
-}
-
-- (void)setupoptionLabel {
-    UIFont *font;
-    CGFloat height = 0;
-    
-    self.optionLabel = [[UILabel alloc] init];
-    
-    CGFloat pad = 10, pad2 = 8;
-    
-    self.optionLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:13];
-    height = 15;
-    
-    
-    
-    [self.optionLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.optionLabel invalidateIntrinsicContentSize];
-    self.optionLabel.font = font;
-    self.optionLabel.textColor = [UIColor blackColor];
-    
-    self.optionLabel.text = @"public";
-    
-    [self.view addSubview:self.optionLabel];
-    
-    
-    NSDictionary *viewsDictionary = @{@"label":self.optionLabel, @"image" : self.checkbox, @"textField": self.networkTextField};
-    NSLayoutConstraint *constraint1 = [NSLayoutConstraint constraintWithItem:self.optionLabel attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.checkbox attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:pad2];
-    NSArray *constraint2 = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[textField]-pad-[label]" options:0 metrics:@{@"pad":[NSNumber numberWithFloat:pad]} views:viewsDictionary];
-    [self.view addConstraint:constraint1];
-    [self.view addConstraints:constraint2];
-    
-}
-
-- (void)boxPressed:(id)sender {
-    
-    if([[DataAccess singletonInstance] snapchatIsPublic]){
-        self.checkbox.image = [UIImage imageNamed:@"checkbox.png"];
-        [[DataAccess singletonInstance] setsnapchatPublicStatus:NO];
-        
-    }else{
-        self.checkbox.image = [UIImage imageNamed:@"checkedbox.png"];
-        [[DataAccess singletonInstance] setsnapchatPublicStatus:YES];
-    }
-    
-}
-
 
 
 - (void)textFieldDidChange {

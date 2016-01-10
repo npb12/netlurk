@@ -1,37 +1,28 @@
 //
-//  ProfileViewController.m
-//  portal
+//  SwipeAlbumViewController.m
+//  netlurk
 //
-//  Created by Neil Ballard on 11/17/15.
-//  Copyright © 2015 Neil_appworld. All rights reserved.
+//  Created by Neil Ballard on 1/4/16.
+//  Copyright © 2016 Neil_appworld. All rights reserved.
 //
 
-#import "ProfileViewController.h"
-#import "DeviceManager.h"
-#import "AlbumsTableViewController.h"
+#import "SwipeAlbumViewController.h"
 #import "DataAccess.h"
-#import "InstagramFieldViewController.h"
-#import "MyProfileTableViewCell.h"
-#import "AccountViewController.h"
-#import "ProfilePictureViewController.h"
+#import "DeviceManager.h"
 
-
-
-@interface ProfileViewController ()
+@interface SwipeAlbumViewController ()
 
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) IBOutlet UIView *tempView;
 @property (nonatomic, assign) CGPoint offset;
-@property (strong, nonatomic) IBOutlet UIImageView *propic;
 @property (strong, nonatomic) IBOutlet UIImageView *pic;
 @property (strong, nonatomic) IBOutlet UIImageView *pic2;
 @property (strong, nonatomic) IBOutlet UIImageView *pic3;
 @property (strong, nonatomic) IBOutlet UIImageView *pic4;
-@property (strong, nonatomic) IBOutlet UIView *headerView;
 
 @end
 
-@implementation ProfileViewController
+@implementation SwipeAlbumViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -40,12 +31,6 @@
     self.navigationController.navigationBarHidden = YES;
     [self.navigationItem setHidesBackButton:YES];
     CGRect fullScreenRect=[[UIScreen mainScreen] bounds];
-    
-    self.facebook = [[DataAccess singletonInstance] getFacebook];
-    self.instagram = [[DataAccess singletonInstance] getInstagram];
-    self.linkedinId = [[DataAccess singletonInstance] getLinkedin];
-    self.snapchat = [[DataAccess singletonInstance] getSnapchat];
-    
     
     self.tempView = [[UIView alloc] init];
     [self.tempView setFrame:fullScreenRect];
@@ -62,9 +47,6 @@
     
     self.scrollView = [[UIScrollView alloc] init];
     self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    
     
     self.scrollView.backgroundColor = [UIColor blackColor];
     
@@ -107,13 +89,6 @@
     self.scrollView.contentOffset = CGPointMake(self.scrollView.bounds.size.width, 0);
     
     
-    [self addHeaderView];
-    [self addProPhoto];
-    [self setupNameLabel];
-    [self addFacebookIcon];
-    [self addInstagramIcon];
-    [self addLinkedinIcon];
-    [self addSnapchatIcon];
     [self addPhoto];
     [self addPhoto2];
     [self addPhoto3];
@@ -124,140 +99,6 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
--(void)addHeaderView{
-    
-    self.headerView = [[UIImageView alloc]init];
-    
-    self.headerView.backgroundColor = [UIColor blackColor];
-    CGFloat width = CGRectGetWidth([[UIScreen mainScreen] bounds]);
-    self.headerView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.headerView invalidateIntrinsicContentSize];
-    
-    
-    
-    self.headerView.alpha = 100.0;
-    
-    
-    [self.view addSubview:self.headerView];
-    
-    CGFloat pad = 0, pad2 = 0, height = 0;
-    if([[DeviceManager sharedInstance] getIsIPhone5Screen])
-    {
-        pad = 0;
-        height = 83;
-        pad2 = 0;
-    }
-    else if ([[DeviceManager sharedInstance] getIsIPhone6Screen])
-    {
-        pad = 0;
-        height = 90;
-        pad2 = 0;
-        
-    }
-    else if ([[DeviceManager sharedInstance] getIsIPhone6PlusScreen])
-    {
-        pad = 0;
-        height = 95;
-        pad2 = 0;
-        
-    }
-    else if ([[DeviceManager sharedInstance] getIsIPhone4Screen] || [[DeviceManager sharedInstance] getIsIPad]) {
-        pad = 0;
-        height = 80;
-        pad2 = 0;
-        
-    }
-    
-    
-    
-    NSDictionary *viewsDictionary = @{@"black":self.headerView};
-    NSArray *constraint1 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-pad-[black]" options:0 metrics:@{@"pad":[NSNumber numberWithFloat:pad2]} views:viewsDictionary];
-    NSArray *constraint2 = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-pad-[black]" options:0 metrics:@{@"pad":[NSNumber numberWithFloat:pad]} views:viewsDictionary];
-    [self.view addConstraints:constraint1];
-    [self.view addConstraints:constraint2];
-    
-    NSLayoutConstraint *constraint3 = [NSLayoutConstraint constraintWithItem:self.headerView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:height];
-    [self.view addConstraint:constraint3];
-    
-    NSLayoutConstraint *constraint4 = [NSLayoutConstraint constraintWithItem:self.headerView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:width];
-    [self.view addConstraint:constraint4];
-    
-}
-
--(void)addProPhoto{
-    
-    self.propic = [[UIImageView alloc]init];
-    
-    self.propic.backgroundColor = [UIColor blueColor];
-    self.propic.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.propic invalidateIntrinsicContentSize];
-    
-    NSData* imageData = [[NSUserDefaults standardUserDefaults] objectForKey:@"ProfileImage"];
-    UIImage* image = [UIImage imageWithData:imageData];
-    
-    
-    if (image != nil) {
-        self.propic.image = [[DataAccess singletonInstance] getProfileImage];
-    }else{
-        self.propic.image = [UIImage imageNamed:@"image_placeholder.png"];
-    }
-    
-    self.propic.alpha = 2.0;
-    self.propic.clipsToBounds = YES;
-    
-    
-    
-    [self.headerView addSubview:self.propic];
-    
-    CGFloat image_size = 0, v_pad = 0, h_pad = 0;
-    if([[DeviceManager sharedInstance] getIsIPhone5Screen])
-    {
-        image_size = 32;
-        v_pad = 6;
-        h_pad = 20;
-        self.propic.layer.cornerRadius = 15;
-        
-    }
-    else if ([[DeviceManager sharedInstance] getIsIPhone6Screen])
-    {
-        image_size = 35;
-        v_pad = 8;
-        h_pad = 24;
-        self.propic.layer.cornerRadius = 18;
-        
-    }
-    else if ([[DeviceManager sharedInstance] getIsIPhone6PlusScreen])
-    {
-        image_size = 38;
-        v_pad = 9;
-        h_pad = 27;
-        self.propic.layer.cornerRadius = 20;
-        
-    }
-    else if ([[DeviceManager sharedInstance] getIsIPhone4Screen] || [[DeviceManager sharedInstance] getIsIPad]) {
-        
-        image_size = 25;
-        v_pad = 3;
-        h_pad = 20;
-        self.propic.layer.cornerRadius = 14;
-    }
-    
-    
-    
-    NSDictionary *viewsDictionary = @{@"image":self.propic};
-    NSArray *constraint1 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-pad-[image]" options:0 metrics:@{@"pad":[NSNumber numberWithFloat:h_pad]} views:viewsDictionary];
-    NSArray *constraint2 = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[image]-pad-|" options:0 metrics:@{@"pad":[NSNumber numberWithFloat:v_pad]} views:viewsDictionary];
-    [self.view addConstraints:constraint1];
-    [self.view addConstraints:constraint2];
-    
-    NSLayoutConstraint *constraint3 = [NSLayoutConstraint constraintWithItem:self.propic attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:image_size];
-    [self.view addConstraint:constraint3];
-    
-    NSLayoutConstraint *constraint4 = [NSLayoutConstraint constraintWithItem:self.propic attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:image_size];
-    [self.view addConstraint:constraint4];
-    
 }
 
 -(void)addPhoto{
@@ -289,26 +130,26 @@
     if([[DeviceManager sharedInstance] getIsIPhone5Screen])
     {
         pad = 65;
-        height = 400;
+        height = 434;
         pad2 = 0;
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone6Screen])
     {
         pad = 70;
-        height = 470;
+        height = 510;
         pad2 = 0;
         
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone6PlusScreen])
     {
         pad = 76;
-        height = 500;
+        height = 550;
         pad2 = 0;
         
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone4Screen] || [[DeviceManager sharedInstance] getIsIPad]) {
         pad = 50;
-        height = 330;
+        height = 375;
         pad2 = 0;
         
     }
@@ -366,26 +207,26 @@
     if([[DeviceManager sharedInstance] getIsIPhone5Screen])
     {
         pad = 65;
-        height = 400;
+        height = 434;
         pad2 = 0;
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone6Screen])
     {
         pad = 70;
-        height = 470;
+        height = 510;
         pad2 = 0;
         
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone6PlusScreen])
     {
         pad = 76;
-        height = 500;
+        height = 550;
         pad2 = 0;
         
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone4Screen] || [[DeviceManager sharedInstance] getIsIPad]) {
         pad = 50;
-        height = 330;
+        height = 375;
         pad2 = 0;
         
     }
@@ -442,26 +283,26 @@
     if([[DeviceManager sharedInstance] getIsIPhone5Screen])
     {
         pad = 65;
-        height = 400;
+        height = 434;
         pad2 = 0;
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone6Screen])
     {
         pad = 70;
-        height = 470;
+        height = 510;
         pad2 = 0;
         
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone6PlusScreen])
     {
         pad = 76;
-        height = 500;
+        height = 550;
         pad2 = 0;
         
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone4Screen] || [[DeviceManager sharedInstance] getIsIPad]) {
         pad = 50;
-        height = 330;
+        height = 375;
         pad2 = 0;
         
     }
@@ -518,26 +359,26 @@
     if([[DeviceManager sharedInstance] getIsIPhone5Screen])
     {
         pad = 65;
-        height = 400;
+        height = 434;
         pad2 = 0;
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone6Screen])
     {
         pad = 70;
-        height = 470;
+        height = 510;
         pad2 = 0;
         
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone6PlusScreen])
     {
         pad = 76;
-        height = 500;
+        height = 550;
         pad2 = 0;
         
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone4Screen] || [[DeviceManager sharedInstance] getIsIPad]) {
         pad = 50;
-        height = 330;
+        height = 375;
         pad2 = 0;
         
     }
@@ -587,38 +428,38 @@
     CGFloat pad = 0, pad2 = 0;
     if([[DeviceManager sharedInstance] getIsIPhone5Screen])
     {
-        self.nameLabel.font = [UIFont systemFontOfSize:17];
-        pad = 10;
-        pad2 = 8;
+        self.nameLabel.font = [UIFont systemFontOfSize:24];
+        pad = 17;
+        pad2 = 5;
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone6Screen])
     {
-        self.nameLabel.font = [UIFont systemFontOfSize:20];
-        pad = 12;
-        pad2 = 4;
+        self.nameLabel.font = [UIFont systemFontOfSize:26];
+        pad = 24;
+        pad2 = 8;
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone6PlusScreen])
     {
-        pad = 14;
-        pad2 = 5;
-        self.nameLabel.font = [UIFont systemFontOfSize:22];
+        pad = 24;
+        pad2 = 8;
+        self.nameLabel.font = [UIFont systemFontOfSize:27];
         
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone4Screen] || [[DeviceManager sharedInstance] getIsIPad]) {
-        pad = 10;
-        pad2 = 3;
-        self.nameLabel.font = [UIFont systemFontOfSize:16];
+        pad = 15;
+        pad2 = 4;
+        self.nameLabel.font = [UIFont systemFontOfSize:19];
         
     }
     
     self.nameLabel.alpha = 100.0;
     
-    [self.headerView addSubview:self.nameLabel];
+    [self.pic addSubview:self.nameLabel];
     
-    NSDictionary *viewsDictionary = @{@"label" : self.nameLabel, @"photo": self.propic};
-    NSArray *constraint1 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[photo]-pad-[label]" options:0 metrics:@{@"pad":[NSNumber numberWithFloat:pad]} views:viewsDictionary];
+    NSDictionary *viewsDictionary = @{@"bottom":self.facebookIcon, @"label" : self.nameLabel};
+    NSArray *constraint1 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-pad-[label]" options:0 metrics:@{@"pad":[NSNumber numberWithFloat:pad]} views:viewsDictionary];
     [self.view addConstraints:constraint1];
-    NSArray *constraint2 = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[label]-pad-|" options:0 metrics:@{@"pad":[NSNumber numberWithFloat:pad2]} views:viewsDictionary];
+    NSArray *constraint2 = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[label]-pad-[bottom]" options:0 metrics:@{@"pad":[NSNumber numberWithFloat:pad2]} views:viewsDictionary];
     [self.view addConstraints:constraint2];
     
 }
@@ -652,35 +493,43 @@
     }
     
     
+    
+    
     [self.facebookIcon setBackgroundColor:[UIColor  clearColor]];
+    
+    
+    
     
     self.facebookIcon.layer.masksToBounds = YES;
     
-    [self.view addSubview:self.facebookIcon];
+    
+    
+    
+    [self.pic addSubview:self.facebookIcon];
     
     CGFloat pad = 0, height = 0, pad2 = 0;
     if([[DeviceManager sharedInstance] getIsIPhone5Screen])
     {
-        pad = 60;
+        pad = 15;
         height = 30;
-        pad2 = 75;
+        pad2 = 17;
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone6Screen])
     {
-        pad = 80;
-        height = 34;
-        pad2 = 100;
+        pad = 13;
+        height = 37;
+        pad2 = 24;
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone6PlusScreen])
     {
-        pad = 85;
-        height = 36;
-        pad2 = 115;
+        pad = 15;
+        height = 39;
+        pad2 = 24;
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone4Screen] || [[DeviceManager sharedInstance] getIsIPad]) {
-        pad = 60;
-        pad2 = 85;
-        height = 25;
+        pad = 10;
+        pad2 = 15;
+        height = 20;
     }
     
     
@@ -743,35 +592,35 @@
      action:@selector(InstagramButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     
     
-    [self.view addSubview:self.instagramIcon];
+    [self.pic addSubview:self.instagramIcon];
     
     CGFloat pad = 0, pad2 = 0, height = 0;
     if([[DeviceManager sharedInstance] getIsIPhone5Screen])
     {
-        pad = 60;
+        pad = 15;
         height = 30;
         pad2 = 15;
         
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone6Screen])
     {
-        pad = 80;
-        height = 34;
-        pad2 = 17;
+        pad = 13;
+        height = 37;
+        pad2 = 13;
         
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone6PlusScreen])
     {
-        pad = 85;
-        height = 36;
-        pad2 = 19;
+        pad = 15;
+        height = 39;
+        pad2 = 13;
         
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone4Screen] || [[DeviceManager sharedInstance] getIsIPad]) {
         
-        height = 25;
-        pad = 60;
-        pad2 = 13;
+        height = 20;
+        pad = 10;
+        pad2 = 12;
         
     }
     
@@ -828,35 +677,44 @@
     }
     
     
-    [self.view addSubview:self.linkedinIcon];
     
-    CGFloat pad = 0, pad2 = 0, height = 0;
+    
+    
+    
+    
+    
+    
+    
+    
+    [self.pic addSubview:self.linkedinIcon];
+    
+    CGFloat pad = 0, height = 0 , pad2 = 0;
     if([[DeviceManager sharedInstance] getIsIPhone5Screen])
     {
-        pad = 60;
+        pad = 15;
         height = 30;
         pad2 = 15;
         
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone6Screen])
     {
-        pad = 80;
-        height = 34;
-        pad2 = 17;
+        pad = 13;
+        height = 37;
+        pad2 = 13;
         
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone6PlusScreen])
     {
-        pad = 85;
-        height = 36;
-        pad2 = 19;
+        pad = 15;
+        height = 39;
+        pad2 = 13;
         
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone4Screen] || [[DeviceManager sharedInstance] getIsIPad]) {
         
-        height = 25;
-        pad = 60;
-        pad2 = 13;
+        height = 20;
+        pad = 10;
+        pad2 = 12;
         
     }
     
@@ -922,35 +780,35 @@
     //    self.socialbackground.layer.shadowOpacity = 0.5;
     
     
-    [self.view addSubview:self.snapchatIcon];
+    [self.pic addSubview:self.snapchatIcon];
     
-    CGFloat pad = 0, pad2 = 0, height = 0;
+    CGFloat pad = 0, height = 0, pad2 = 0;
     if([[DeviceManager sharedInstance] getIsIPhone5Screen])
     {
-        pad = 60;
+        pad = 15;
         height = 30;
         pad2 = 15;
         
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone6Screen])
     {
-        pad = 80;
-        height = 34;
-        pad2 = 17;
+        pad = 13;
+        height = 38;
+        pad2 = 13;
         
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone6PlusScreen])
     {
-        pad = 85;
-        height = 36;
-        pad2 = 19;
+        pad = 15;
+        height = 39;
+        pad2 = 13;
         
     }
     else if ([[DeviceManager sharedInstance] getIsIPhone4Screen] || [[DeviceManager sharedInstance] getIsIPad]) {
         
-        height = 25;
-        pad = 60;
-        pad2 = 13;
+        height = 20;
+        pad = 10;
+        pad2 = 12;
         
     }
     
@@ -970,75 +828,10 @@
     
 }
 
--(void)FacebookButtonClicked{
-    
-    //    NSString *facebook =  [[DataAccess singletonInstance] getFacebook];
-    
-    NSString *url = @"fb://profile/";
-    //  NSURL *bUrl = [NSURL URLWithString:url];
-    //  NSURL *fbURL = [bUrl URLByAppendingPathComponent:facebook];
-    
-    NSURL *fbURL = [NSURL URLWithString:url];
-    
-    NSLog(@"%@", fbURL);
-    
-    if ([[UIApplication sharedApplication] openURL:fbURL]) {
-        NSLog(@"trying to open");
-        [[UIApplication sharedApplication] openURL:fbURL];
-    }else{
-        
-    }
-    
-}
-
-
--(void)InstagramButtonClicked{
-    
-    NSString *insta =  [[DataAccess singletonInstance] getInstagram];
-    
-    NSString *url = @"instagram://user?username=";
-    NSString *bURL = [url stringByAppendingString:insta];
-    NSURL *instagramURL = [NSURL URLWithString:bURL];
-    //NSURL *instagramURL = [bUrl URLByAppendingPathComponent:insta];
-    
-    NSLog(@"%@", instagramURL);
-    
-    if ([[UIApplication sharedApplication] openURL:instagramURL]) {
-        NSLog(@"trying to open");
-        [[UIApplication sharedApplication] openURL:instagramURL];
-    }else{
-        
-    }
-    
-}
-
-
-
--(void)LinkedinButtonClicked{
-    
-    //    NSURL *linkURL = [NSURL URLWithString:@"linkedin://#profile/45b862b6"];
-    //    [[UIApplication sharedApplication] openURL:linkURL];
-    
-    
-    
-    [[LISDKDeeplinkHelper sharedInstance] viewOtherProfile:self.linkedinId withState:self.linkedinId showGoToAppStoreDialog:YES success:nil error:nil];
-    
-}
-
--(void)SnapchatButtonClicked{
-    
-    //    self.snapchatbackground.hidden = NO;
-    
-    
-}
-
-
 -(IBAction)goBack:(id)sender{
     
     //[self.navigationController dismissViewControllerAnimated:YES completion:nil];
     [self.navigationController popViewControllerAnimated:NO];
 }
-
-
 
 @end

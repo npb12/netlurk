@@ -1,17 +1,15 @@
 //
-//  ProfileViewController.h
-//  portal
+//  UserAlbumViewController.h
+//  netlurk
 //
-//  Created by Neil Ballard on 11/17/15.
-//  Copyright © 2015 Neil_appworld. All rights reserved.
+//  Created by Neil Ballard on 1/4/16.
+//  Copyright © 2016 Neil_appworld. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import <linkedin-sdk/LISDK.h>
 
-
-@interface ProfileViewController : UIViewController<UIScrollViewDelegate>
-
+@interface UserAlbumViewController : UIViewController<UIScrollViewDelegate>
 
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic, strong) UILabel *contact_time;
@@ -27,6 +25,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *instagramIcon;
 @property (strong, nonatomic) IBOutlet UIButton *linkedinIcon;
 @property (strong, nonatomic) IBOutlet UIButton *snapchatIcon;
+
 
 
 @end
